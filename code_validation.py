@@ -5,7 +5,8 @@ import re
 
 class CodeValidation:
   regex = r"^\d\d\d\d-\d\d\d[B,C,M]A?$"
-  
+  checkedCodes = dict(str, int)
+
   def __init__(self, file: BytesIO):
     self.file = file
 
@@ -22,10 +23,15 @@ class CodeValidation:
     
     return BytesIO(response.encode())
   def ValidationCondition(self) -> str:
-     return "Таблиця була перевірина на наступні умови \n Код повинен бути 0000-000(B/C/M - це велика середня чи маленька, повинні бути англиські букви)(A - акційни това чи ні) \n Приклад вірного коду 1234-123В або 1234-123СА \n"
+     return "Таблиця була перевірина на наступні умови \n Код повинен бути 0000-000(B/C/M - це велика, середня чи маленька, повинні бути англійські букви)(A - акційний товар чи ні) \n Приклад вірного коду 1234-123В або 1234-123СА \n На дуплікацію коду \n"
 
   def CheckCode(self, cell) -> str:
        errMessage = "\n Рядок " + str(cell.row) + " "
        match = re.fullmatch(self.regex, cell.value)
        if(match is None):
-          return errMessage + "код " + str(cell.value) + " має невірну структуру."
+          errMessage += "код " + str(cell.value) + " має невірну структуру."
+       if(self.checkedCodes.get(cell.value) is not None):
+          errMessage += "код " + str(cell.value) + " має дуплікат на " + str(self.checkedCodes.get(cell.value)) + " рядку"
+       else:
+          self.checkedCodes[cell.value] = cell.row
+       return errMessage
