@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  idealtex.code.validation:
+    build:
+      context: .
+    environment:
+      - TELEGRAM_BOT_KEY=${TELEGRAM_BOT_KEY}
