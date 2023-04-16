@@ -5,7 +5,7 @@ import re
 
 class CodeValidation:
   regex = r"^\d\d\d\d-\d\d\d[B,C,M]A?$"
-  checkedCodes = dict(str, int)
+  checkedCodes = dict()
 
   def __init__(self, file: BytesIO):
     self.file = file
