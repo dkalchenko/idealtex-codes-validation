@@ -11,6 +11,7 @@ class CodeValidation:
     self.file = file
 
   def ValidateProducts(self) -> BytesIO:
+    self.checkedCodes.clear()
     productsTables = openpyxl.load_workbook(filename=self.file)
     productsSheet = productsTables.active
     if(productsSheet is None):
